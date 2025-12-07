@@ -1,6 +1,0 @@
-@Fiap.FCG.Payment.WebApi_HostAddress = http://localhost:5208
-
-GET {{Fiap.FCG.Payment.WebApi_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
