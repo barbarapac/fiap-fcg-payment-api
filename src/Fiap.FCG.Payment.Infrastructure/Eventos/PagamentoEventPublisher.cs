@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Fiap.FCG.Payment.Infrastructure.Eventos
 {
-    public class PaymentEventPublisher : IPagamentoEventPublisher
+    public class PagamentoEventPublisher : IPagamentoEventPublisher
     {
         private readonly ServiceBusSender _sender;
 
-        public PaymentEventPublisher(IConfiguration config)
+        public PagamentoEventPublisher(IConfiguration config)
         {
             var conn = config["SERVICEBUS_CONNECTION"];
             var client = new ServiceBusClient(conn);

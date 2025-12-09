@@ -1,5 +1,7 @@
-﻿using Fiap.FCG.Payment.Domain.Pagamentos;
+﻿using Fiap.FCG.Payment.Domain.Eventos;
+using Fiap.FCG.Payment.Domain.Pagamentos;
 using Fiap.FCG.Payment.Infrastructure._Shared;
+using Fiap.FCG.Payment.Infrastructure.Eventos;
 using Fiap.FCG.Payment.Infrastructure.Pagamentos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -14,6 +16,7 @@ namespace Fiap.FCG.Payment.Infrastructure
         {
             AddDbContext(services, configuration);
             AddRepositories(services);
+            AddPublishers(services);
         }
 
         private static void AddDbContext(IServiceCollection services, IConfiguration configuration)
@@ -29,6 +32,11 @@ namespace Fiap.FCG.Payment.Infrastructure
         private static void AddRepositories(IServiceCollection services)
         {
             services.AddScoped<IPagamentoRepository, PagamentoRepository>();
+        }
+
+        private static void AddPublishers(IServiceCollection services)
+        {
+            services.AddScoped<IPagamentoEventPublisher, PagamentoEventPublisher>();
         }
     }
 }
