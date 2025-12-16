@@ -35,8 +35,7 @@ namespace Fiap.FCG.Payment.Infrastructure
         }
 
         private static void AddPublishers(IServiceCollection services)
-        {
-            services.AddScoped<IPagamentoEventPublisher, PagamentoEventPublisher>();
+        {            
         }
     }
 }
