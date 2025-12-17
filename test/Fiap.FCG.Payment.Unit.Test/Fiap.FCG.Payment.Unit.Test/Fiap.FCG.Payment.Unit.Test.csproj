@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>$(TargetFramework)</TargetFramework>
+		<LangVersion>$(LangVersion)</LangVersion>
+		<Nullable>$(Nullable)</Nullable>
+		<ImplicitUsings>$(ImplicitUsings)</ImplicitUsings>
+		<ManagePackageVersionsCentrally>$(ManagePackageVersionsCentrally)</ManagePackageVersionsCentrally>
+		<IsTestProject>$(IsTestProject)</IsTestProject>
+	</PropertyGroup>
+
+  <ItemGroup>
+        <PackageReference Include="AutoBogus" />
+        <PackageReference Include="coverlet.collector" />
+        <PackageReference Include="coverlet.msbuild" />
+        <PackageReference Include="FluentAssertions" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" />
+        <PackageReference Include="Moq" />
+        <PackageReference Include="NUnit.Analyzers" />
+        <PackageReference Include="NUnit3TestAdapter" />
+        <PackageReference Include="xunit" />
+        <PackageReference Include="xunit.runner.visualstudio" />
+    </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\Fiap.FCG.Payment.Application\Fiap.FCG.Payment.Application.csproj" />
+    <ProjectReference Include="..\..\..\src\Fiap.FCG.Payment.Domain\Fiap.FCG.Payment.Domain.csproj" />
+    <ProjectReference Include="..\..\..\src\Fiap.FCG.Payment.Infrastructure\Fiap.FCG.Payment.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\..\src\Fiap.FCG.Payment.WebApi\Fiap.FCG.Payment.WebApi.csproj" />
+  </ItemGroup>
+
+</Project>
