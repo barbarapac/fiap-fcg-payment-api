@@ -4,67 +4,73 @@ namespace Fiap.FCG.Payment.Domain.Pagamentos
 {
     public class Pagamento : Base
     {
+        public int CompraId { get; private set; }
         public int UsuarioId { get; private set; }
-        public int JogoId { get; private set; }
-        public decimal Valor { get; private set; }
+        public decimal ValorTotal { get; private set; }
         public DateTime CriadoEm { get; private set; }
-        public EStatusPagamento Status { get; private set; }
 
-        public List<TransacaoPagamento> Transacoes { get; private set; } = new();
+        public EMetodoPagamento MetodoPagamento { get; private set; }
+        public EBandeiraCartao? BandeiraCartao { get; private set; }
+
+        public EStatusPagamento Status { get; private set; }
 
         private Pagamento() { }
 
-        public static Result<Pagamento> Criar(int usuarioId, int jogoId, decimal valor)
+        public static Result<Pagamento> Criar(
+            int compraId,
+            int usuarioId,
+            decimal valor,
+            EMetodoPagamento metodoPagamento,
+            EBandeiraCartao? bandeiraCartao)
         {
+            if (compraId <= 0)
+                return Result.Failure<Pagamento>("Compra inválida.");
+
             if (usuarioId <= 0)
                 return Result.Failure<Pagamento>("Usuário inválido.");
-            if (jogoId <= 0)
-                return Result.Failure<Pagamento>("Jogo inválido.");
+
             if (valor <= 0)
                 return Result.Failure<Pagamento>("Valor deve ser maior que zero.");
 
+            if (metodoPagamento == EMetodoPagamento.Credito && bandeiraCartao is null)
+                return Result.Failure<Pagamento>("Bandeira do cartão é obrigatória para crédito.");
+
             var pagamento = new Pagamento
             {
+                CompraId = compraId,
                 UsuarioId = usuarioId,
-                JogoId = jogoId,
-                Valor = valor,
+                ValorTotal = valor,
+                MetodoPagamento = metodoPagamento,
+                BandeiraCartao = bandeiraCartao,
                 CriadoEm = DateTime.UtcNow,
                 Status = EStatusPagamento.Pendente
             };
 
+            pagamento.Processar();
+
             return Result.Success(pagamento);
         }
-
-        public Result<bool> Aprovar()
+        /// <summary>
+        /// Simula o processamento do pagamento com base nas regras definidas.
+        /// </summary>
+        private void Processar()
         {
-            if (Status != EStatusPagamento.Pendente)
-                return Result.Failure<bool>("Pagamento não está pendente.");
+            if (MetodoPagamento == EMetodoPagamento.Pix)
+            {
+                Status = EStatusPagamento.Aprovado;
+                return;
+            }
 
-            Status = EStatusPagamento.Aprovado;
-            return Result.Success(true);
-        }
+            if (MetodoPagamento == EMetodoPagamento.Credito)
+            {                
+                if (BandeiraCartao == EBandeiraCartao.Elo)
+                {
+                    Status = EStatusPagamento.Recusado;
+                    return;
+                }
 
-        public Result<bool> Recusar()
-        {
-            if (Status != EStatusPagamento.Pendente)
-                return Result.Failure<bool>("Pagamento não está pendente.");
-
-            Status = EStatusPagamento.Recusado;
-            return Result.Success(true);
-        }
-
-        public Result<TransacaoPagamento> RegistrarTransacao(string codigo, string provedor)
-        {
-            if (string.IsNullOrWhiteSpace(codigo))
-                return Result.Failure<TransacaoPagamento>("Código inválido.");
-
-            if (string.IsNullOrWhiteSpace(provedor))
-                return Result.Failure<TransacaoPagamento>("Provedor inválido.");
-
-            var transacao = new TransacaoPagamento(Id, codigo, provedor);
-            Transacoes.Add(transacao);
-
-            return Result.Success(transacao);
+                Status = EStatusPagamento.Aprovado;
+            }
         }
     }
 }

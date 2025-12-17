@@ -24,18 +24,9 @@ namespace Fiap.FCG.Payment.Application.Pagamentos.Consultar
             {
                 Id = pagamento.Id,
                 UsuarioId = pagamento.UsuarioId,
-                JogoId = pagamento.JogoId,
-                Valor = pagamento.Valor,
+                Valor = pagamento.ValorTotal,
                 Status = pagamento.Status.ToString(),
-                CriadoEm = pagamento.CriadoEm,
-                Transacoes = pagamento.Transacoes
-                    .Select(t => new PagamentoDetalheResponse.TransacaoDto
-                    {
-                        Codigo = t.CodigoTransacao,
-                        Provedor = t.Provedor,
-                        Data = t.DataRegistro
-                    })
-                    .ToList()
+                CriadoEm = pagamento.CriadoEm
             };
 
             return Result.Success(response);

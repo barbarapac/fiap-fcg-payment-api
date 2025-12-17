@@ -15,10 +15,7 @@ namespace Fiap.FCG.Payment.Infrastructure.Pagamentos
             builder.Property(p => p.UsuarioId)
                 .IsRequired();
 
-            builder.Property(p => p.JogoId)
-                .IsRequired();
-
-            builder.Property(p => p.Valor)
+            builder.Property(p => p.ValorTotal)
                 .HasColumnType("decimal(18,2)")
                 .IsRequired();
 
@@ -28,11 +25,18 @@ namespace Fiap.FCG.Payment.Infrastructure.Pagamentos
             builder.Property(p => p.CriadoEm)
                 .IsRequired();
 
-            builder
-                .HasMany(p => p.Transacoes)
-                .WithOne()
-                .HasForeignKey(t => t.PagamentoId)
-                .OnDelete(DeleteBehavior.Cascade);
+            builder.Property(p => p.MetodoPagamento)
+                .HasConversion<string>()
+                .IsRequired();
+
+            builder.Property(p => p.BandeiraCartao)
+                .HasConversion<string>()
+                .IsRequired(false);
+
+            builder.Property(p => p.Status)
+                .HasConversion<string>()
+                .IsRequired();
+
         }
     }
 }

@@ -25,8 +25,8 @@ namespace Fiap.FCG.Payment.Infrastructure.Eventos
             {
                 pagamento.Id,
                 pagamento.UsuarioId,
-                pagamento.JogoId,
-                pagamento.Valor
+                pagamento.CompraId,
+                pagamento.ValorTotal
             });
 
             await _sender.SendMessageAsync(new ServiceBusMessage(payload));

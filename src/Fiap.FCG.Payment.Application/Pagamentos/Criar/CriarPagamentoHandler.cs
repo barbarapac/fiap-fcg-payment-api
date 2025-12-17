@@ -1,5 +1,4 @@
 ﻿using Fiap.FCG.Payment.Domain._Shared;
-using Fiap.FCG.Payment.Domain.Eventos;
 using Fiap.FCG.Payment.Domain.Pagamentos;
 using MediatR;
 
@@ -9,15 +8,20 @@ namespace Fiap.FCG.Payment.Application.Pagamentos.Criar
     {
         private readonly IPagamentoRepository _repository;
 
-        public CriarPagamentoHandler(
-            IPagamentoRepository repository)
+        public CriarPagamentoHandler(IPagamentoRepository repository)
         {
             _repository = repository;
         }
 
         public async Task<Result<int>> Handle(CriarPagamentoCommand request, CancellationToken cancellationToken)
         {
-            var pagamentoResult = Pagamento.Criar(request.UsuarioId, request.JogoId, request.Valor);
+            var pagamentoResult = Pagamento.Criar(
+                request.CompraId,
+                request.UsuarioId,
+                request.ValorTotal,
+                request.MetodoPagamento,
+                request.BandeiraCartao
+                );
 
             if (!pagamentoResult.Sucesso)
                 return Result.Failure<int>(pagamentoResult.Erro);

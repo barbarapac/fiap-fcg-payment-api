@@ -9,7 +9,6 @@ namespace Fiap.FCG.Payment.Infrastructure._Shared
             : base(options) { }
 
         public DbSet<Pagamento> Pagamentos { get; set; }
-        public DbSet<TransacaoPagamento> Transacoes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

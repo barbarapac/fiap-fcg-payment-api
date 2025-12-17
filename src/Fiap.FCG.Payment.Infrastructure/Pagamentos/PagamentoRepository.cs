@@ -23,7 +23,6 @@ namespace Fiap.FCG.Payment.Infrastructure.Pagamentos
         public async Task<Pagamento> ObterPorIdAsync(int id)
         {
             return await _context.Pagamentos
-                .Include(p => p.Transacoes)
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
     }
