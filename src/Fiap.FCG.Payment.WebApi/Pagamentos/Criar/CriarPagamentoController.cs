@@ -19,8 +19,7 @@ namespace Fiap.FCG.Payment.WebApi.Pagamentos.Criar
         {
             _mediator = mediator;
         }
-
-        [Authorize]
+        
         [HttpPost]
         [SwaggerOperation(
             Summary = "Cria um pagamento",
