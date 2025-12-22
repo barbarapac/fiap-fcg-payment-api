@@ -30,4 +30,8 @@
     <ProjectReference Include="..\..\..\src\Fiap.FCG.Payment.WebApi\Fiap.FCG.Payment.WebApi.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Application\Fixtures\" />
+  </ItemGroup>
+
 </Project>
