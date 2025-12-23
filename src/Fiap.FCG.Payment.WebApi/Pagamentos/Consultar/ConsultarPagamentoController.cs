@@ -1,6 +1,5 @@
 ﻿using Fiap.FCG.Payment.Application.Pagamentos.Consultar;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -20,7 +19,6 @@ namespace Fiap.FCG.Payment.WebApi.Pagamentos.Consultar
             _mediator = mediator;
         }
 
-        [Authorize]
         [HttpGet("{pagamentoId}")]
         [SwaggerOperation(
             Summary = "Consulta detalhes de um pagamento",
