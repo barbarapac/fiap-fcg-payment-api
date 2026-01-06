@@ -1,10 +1,12 @@
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
 namespace Fiap.FCG.Payment.Application.Observability;
 
+[ExcludeFromCodeCoverage]
 public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     where TRequest : notnull
 {
@@ -25,7 +27,7 @@ public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, 
         using var scope = _logger.BeginScope(BuildScope(request, requestName));
 
         var sw = Stopwatch.StartNew();
-        _logger.LogInformation("Processamento da requisição iniciado");
+        _logger.LogInformation("Processamento da requisiï¿½ï¿½o iniciado");
 
         try
         {
@@ -35,7 +37,7 @@ public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, 
             Activity.Current?.AddEvent(new ActivityEvent("handler.completed"));
 
             _logger.LogInformation(
-                "Processamento da requisição concluído. DuracaoMs: {DuracaoMs}",
+                "Processamento da requisiï¿½ï¿½o concluï¿½do. DuracaoMs: {DuracaoMs}",
                 sw.ElapsedMilliseconds);
 
             return response;
@@ -47,7 +49,7 @@ public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, 
 
             _logger.LogError(
                 ex,
-                "Falha no processamento da requisição. DuracaoMs: {DuracaoMs}",
+                "Falha no processamento da requisiï¿½ï¿½o. DuracaoMs: {DuracaoMs}",
                 sw.ElapsedMilliseconds);
 
             throw;

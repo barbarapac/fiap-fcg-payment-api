@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
 namespace Fiap.FCG.Payment.WebApi._Shared;
 
+[ExcludeFromCodeCoverage]
 public class RequestLoggingScopeMiddleware
 {
     private const string CorrelationHeader = "X-Correlation-ID";
@@ -44,7 +46,7 @@ public class RequestLoggingScopeMiddleware
         });
 
         var sw = Stopwatch.StartNew();
-        _logger.LogInformation("Requisição HTTP iniciada");
+        _logger.LogInformation("Requisiï¿½ï¿½o HTTP iniciada");
 
         try
         {
@@ -52,7 +54,7 @@ public class RequestLoggingScopeMiddleware
             sw.Stop();
 
             _logger.LogInformation(
-                "Requisição HTTP finalizada. StatusCode: {StatusCode}. DuracaoMs: {DuracaoMs}",
+                "Requisiï¿½ï¿½o HTTP finalizada. StatusCode: {StatusCode}. DuracaoMs: {DuracaoMs}",
                 context.Response.StatusCode,
                 sw.ElapsedMilliseconds);
         }
@@ -61,7 +63,7 @@ public class RequestLoggingScopeMiddleware
             sw.Stop();
 
             _logger.LogError(
-                "Falha ao processar requisição HTTP. DuracaoMs: {DuracaoMs}",
+                "Falha ao processar requisiï¿½ï¿½o HTTP. DuracaoMs: {DuracaoMs}",
                 sw.ElapsedMilliseconds);
 
             throw;

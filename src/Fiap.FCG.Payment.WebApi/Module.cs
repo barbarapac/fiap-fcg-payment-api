@@ -1,54 +1,56 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
-namespace Fiap.FCG.Payment.WebApi
+namespace Fiap.FCG.Payment.WebApi;
+
+[ExcludeFromCodeCoverage]
+public static class Module
 {
-    public static class Module
+    public static void AddWebApi(this IServiceCollection services)
     {
-        public static void AddWebApi(this IServiceCollection services)
-        {
-            AddControllers(services);
-            AddSwagger(services);
-        }
+        AddControllers(services);
+        AddSwagger(services);
+    }
 
-        private static void AddControllers(IServiceCollection services)
-        {
-            services.AddControllers()
-                .AddJsonOptions(options =>
-                {
-                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-                });
-        }
-
-        private static void AddSwagger(IServiceCollection services)
-        {
-            services.AddSwaggerGen(c =>
+    private static void AddControllers(IServiceCollection services)
+    {
+        services.AddControllers()
+            .AddJsonOptions(options =>
             {
-                c.EnableAnnotations();
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            });
+    }
 
-                c.TagActionsBy(api =>
-                {
-                    var groupName = api.GroupName;
-                    return !string.IsNullOrEmpty(groupName)
-                        ? new[] { groupName }
-                        : new[] { api.ActionDescriptor.RouteValues["controller"] };
-                });
+    private static void AddSwagger(IServiceCollection services)
+    {
+        services.AddSwaggerGen(c =>
+        {
+            c.EnableAnnotations();
 
-                c.DocInclusionPredicate((_, _) => true);
+            c.TagActionsBy(api =>
+            {
+                var groupName = api.GroupName;
+                return !string.IsNullOrEmpty(groupName)
+                    ? new[] { groupName }
+                    : new[] { api.ActionDescriptor.RouteValues["controller"] };
+            });
 
-                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                {
-                    Name = "Authorization",
-                    Description = "Insira seu token JWT: Bearer {token}",
-                    In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.Http,
-                    Scheme = "Bearer",
-                    BearerFormat = "JWT"
-                });
+            c.DocInclusionPredicate((_, _) => true);
 
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                Name = "Authorization",
+                Description = "Insira seu token JWT: Bearer {token}",
+                In = ParameterLocation.Header,
+                Type = SecuritySchemeType.Http,
+                Scheme = "Bearer",
+                BearerFormat = "JWT"
+            });
+
+            c.AddSecurityRequirement(new OpenApiSecurityRequirement
             {
                 {
                     new OpenApiSecurityScheme
@@ -62,7 +64,6 @@ namespace Fiap.FCG.Payment.WebApi
                     Array.Empty<string>()
                 }
             });
-            });
-        }
+        });
     }
 }

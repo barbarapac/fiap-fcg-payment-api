@@ -1,5 +1,4 @@
-﻿using AutoBogus;
-using Bogus;
+﻿using Bogus;
 using Fiap.FCG.Payment.Domain._Shared;
 
 namespace Fiap.FCG.Payment.Unit.Test.Domain.Fakers
