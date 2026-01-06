@@ -54,7 +54,7 @@ jobs:
 
       - name: Test with coverage (OpenCover)
         run: |
-          dotnet test test/Fiap.FCG.Payment.Unit.Test/Fiap.FCG.Payment.Unit.Test.csproj \
+          dotnet test test/Fiap.FCG.Payment.Unit.Test/Fiap.FCG.Payment.Unit.Test/Fiap.FCG.Payment.Unit.Test.csproj \
             --configuration Release --no-build --logger "trx;LogFileName=test-results.trx" \
             /p:CollectCoverage=true \
             /p:CoverletOutput=${{ github.workspace }}/test/Fiap.FCG.Payment.Unit.Test/TestResults/coverage.opencover.xml \
