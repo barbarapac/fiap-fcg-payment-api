@@ -24,10 +24,10 @@
     </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\Fiap.FCG.Payment.Application\Fiap.FCG.Payment.Application.csproj" />
-    <ProjectReference Include="..\..\..\src\Fiap.FCG.Payment.Domain\Fiap.FCG.Payment.Domain.csproj" />
-    <ProjectReference Include="..\..\..\src\Fiap.FCG.Payment.Infrastructure\Fiap.FCG.Payment.Infrastructure.csproj" />
-    <ProjectReference Include="..\..\..\src\Fiap.FCG.Payment.WebApi\Fiap.FCG.Payment.WebApi.csproj" />
+    <ProjectReference Include="..\..\src\Fiap.FCG.Payment.Application\Fiap.FCG.Payment.Application.csproj" />
+    <ProjectReference Include="..\..\src\Fiap.FCG.Payment.Domain\Fiap.FCG.Payment.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Fiap.FCG.Payment.Infrastructure\Fiap.FCG.Payment.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\Fiap.FCG.Payment.WebApi\Fiap.FCG.Payment.WebApi.csproj" />
   </ItemGroup>
 
 </Project>
