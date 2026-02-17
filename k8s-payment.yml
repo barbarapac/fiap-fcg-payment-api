@@ -1,0 +1,107 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fcg-payment-api-config
+  namespace: fcg-payment-ns
+data:
+  ASPNETCORE_URLS: "http://+:8080"
+  ASPNETCORE_ENVIRONMENT: "Production"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: fcg-payment-api-secrets
+  namespace: fcg-payment-ns
+type: Opaque
+stringData:
+  PAYMENT_CONNECTION_STRING: "Server=fcg-postgres.postgres.database.azure.com;Database=fcg_payment_db;Port=5432;User Id=fcgadmin;Password=Batman@123;"
+  JWT_KEY: "chave-super-secreta-para-assinar-jwt"
+  JWT_ISSUER: "Fiap.FCG"
+  JWT_AUDIENCE: "Fiap.FCG"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fcg-payment-api
+  namespace: fcg-payment-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fcg-payment-api
+  template:
+    metadata:
+      labels:
+        app: fcg-payment-api
+    spec:
+      containers:
+        - name: fcg-payment-api
+          image: fcgacr.azurecr.io/fiap-fcg-payment-api:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: fcg-payment-api-config
+          env:
+            - name: PAYMENT_CONNECTION_STRING
+              valueFrom:
+                secretKeyRef:
+                  name: fcg-payment-api-secrets
+                  key: PAYMENT_CONNECTION_STRING
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: fcg-payment-api-secrets
+                  key: JWT_KEY
+            - name: JWT_ISSUER
+              valueFrom:
+                secretKeyRef:
+                  name: fcg-payment-api-secrets
+                  key: JWT_ISSUER
+            - name: JWT_AUDIENCE
+              valueFrom:
+                secretKeyRef:
+                  name: fcg-payment-api-secrets
+                  key: JWT_AUDIENCE
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "300m"
+              memory: "512Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fcg-payment-api-svc
+  namespace: fcg-payment-ns
+spec:
+  selector:
+    app: fcg-payment-api
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+  type: LoadBalancer
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: fcg-payment-api-hpa
+  namespace: fcg-payment-ns
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: fcg-payment-api
+  minReplicas: 1
+  maxReplicas: 2
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 60
