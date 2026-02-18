@@ -1,5 +1,6 @@
 ﻿using Fiap.FCG.Payment.Domain.Pagamentos;
 using Fiap.FCG.Payment.Infrastructure._Shared;
+using Fiap.FCG.Payment.Infrastructure.Messaging;
 using Fiap.FCG.Payment.Infrastructure.Pagamentos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -17,6 +18,7 @@ public static class Module
         AddDbContext(services, configuration);
         AddRepositories(services);
         AddPublishers(services);
+        services.AddServiceBusMessaging(configuration);
     }
 
     private static void AddDbContext(IServiceCollection services, IConfiguration configuration)
