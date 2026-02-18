@@ -5,7 +5,8 @@ metadata:
   namespace: fcg-payment-ns
 data:
   ASPNETCORE_URLS: "http://+:8080"
-  ASPNETCORE_ENVIRONMENT: "Production"
+  ASPNETCORE_ENVIRONMENT: "Production"  
+  SERVICEBUS_QUEUE: "compras-realizadas"
 ---
 apiVersion: v1
 kind: Secret
@@ -13,11 +14,12 @@ metadata:
   name: fcg-payment-api-secrets
   namespace: fcg-payment-ns
 type: Opaque
-data:
+data:  
   PAYMENT_CONNECTION_STRING: U2VydmVyPWZjZy1wb3N0Z3Jlcy5wb3N0Z3Jlcy5kYXRhYmFzZS5henVyZS5jb207RGF0YWJhc2U9ZmNnX3BheW1lbnRfZGI7UG9ydD01NDMyO1VzZXIgSWQ9ZmNnYWRtaW47UGFzc3dvcmQ9QmF0bWFuQDEyMzs=
   JWT_KEY: Y2hhdmUtc3VwZXItc2VjcmV0YS1wYXJhLWFzc2luYXItand0
   JWT_ISSUER: RmlhcC5GQ0c=
   JWT_AUDIENCE: RmlhcC5GQ0c=
+  SERVICEBUS_CONNECTION: RW5kcG9pbnQ9c2I6Ly9mY2dmaWFwLXNlcnZpY2VidXMuc2VydmljZWJ1cy53aW5kb3dzLm5ldC87U2hhcmVkQWNjZXNzS2V5TmFtZT1Sb290TWFuYWdlU2hhcmVkQWNjZXNzS2V5O1NoYXJlZEFjY2Vzc0tleT1HdlhjMk5GREJOQWtPRVBvYlRibjJHLzIvWjFBWkFwTzYrQVNiTWI4NTFRPQ==
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -63,7 +65,17 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: fcg-payment-api-secrets
-                  key: JWT_AUDIENCE
+                  key: JWT_AUDIENCE           
+            - name: SERVICEBUS_CONNECTION
+              valueFrom:
+                secretKeyRef:
+                  name: fcg-payment-api-secrets
+                  key: SERVICEBUS_CONNECTION
+            - name: SERVICEBUS_QUEUE
+              valueFrom:
+                configMapKeyRef:
+                  name: fcg-payment-api-config
+                  key: SERVICEBUS_QUEUE
           resources:
             requests:
               cpu: "100m"
